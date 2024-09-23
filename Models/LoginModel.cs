@@ -5,16 +5,18 @@ namespace reportesApi.Models
     {
         public int Id { get; set; }
         public string Nombres{ get; set; }
+         public string Apellidos{ get; set; }
         public string Correo { get; set; }
         public string Contraseña { get; set; }
-        public string NumeroTelefono { get; set; }
+        public int NumeroTelefono { get; set; }
         public string Token { get; set; }
     }
 
-     public class InsertLoginModel 
+     public class InsertRegistroModel 
     {
         public string Nombres { get; set; }
-        public string NumeroTelefono{ get; set; }
+         public string Apellidos{ get; set; }
+        public int NumeroTelefono{ get; set; }
         public string Correo { get; set; }
         public string Contraseña { get; set; }
     }
