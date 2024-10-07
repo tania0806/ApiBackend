@@ -43,7 +43,7 @@ namespace reportesApi.Controllers
         }
 
 
-        [HttpPost("InserInsumo")]
+        [HttpPost("InsertInsumo")]
         public IActionResult InsertInsumo([FromBody] InsertInsumoModel req )
         {
             var objectResponse = Helper.GetStructResponse();
@@ -51,7 +51,7 @@ namespace reportesApi.Controllers
             {
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
-                objectResponse.message = _InsumoService.InserInsumo(req);
+                objectResponse.message = _InsumoService.InsertInsumo(req);
 
             }
 

@@ -49,11 +49,8 @@ namespace reportesApi.Services
                         IdEntrada = int.Parse(dataRow["IdEntrada"].ToString()),
                         Insumo = dataRow["Insumo"].ToString(),
                         Cantidad = dataRow["Cantidad"].ToString(),
-                        SinCargo = decimal.Parse(dataRow["SinCargo"].ToString()),
                         Costo = decimal.Parse(dataRow["Costo"].ToString()),
-                        Estatus = int.Parse(dataRow["Estatus"].ToString()),
-                        Usuario_registra = int.Parse(dataRow["Usuario_registra"].ToString()),
-                        Fecha_registro = dataRow["Fecha_registro"].ToString()
+                    
                     }).ToList();
                 }
             }
@@ -74,7 +71,7 @@ namespace reportesApi.Services
             parametros.Add(new SqlParameter { ParameterName = "@Insumo", SqlDbType = System.Data.SqlDbType.Int, Value = entradas.Insumo});
             parametros.Add(new SqlParameter { ParameterName = "@Cantidad", SqlDbType = System.Data.SqlDbType.Decimal, Value = entradas.Cantidad});
             parametros.Add(new SqlParameter { ParameterName = "@Costo", SqlDbType = System.Data.SqlDbType.Decimal, Value = entradas.Costo});
-             parametros.Add(new SqlParameter { ParameterName = "@Usuario_registra", SqlDbType = System.Data.SqlDbType.Decimal, Value = entradas.Usuario_registra});
+          
             try
             {
                 DataSet ds = dac.Fill("InsertDetalleEntrada", parametros);
@@ -97,10 +94,9 @@ namespace reportesApi.Services
             parametros.Add(new SqlParameter { ParameterName = "@IdEntrada", SqlDbType = System.Data.SqlDbType.Int, Value = entrada.IdEntrada});
             parametros.Add(new SqlParameter { ParameterName = "@Insumo", SqlDbType = System.Data.SqlDbType.VarChar, Value = entrada.Insumo});
             parametros.Add(new SqlParameter { ParameterName = "@Cantidad", SqlDbType = System.Data.SqlDbType.VarChar, Value = entrada.Cantidad});
-            parametros.Add(new SqlParameter { ParameterName = "@SinCargo", SqlDbType = System.Data.SqlDbType.Decimal, Value = entrada.SinCargo});
+          
             parametros.Add(new SqlParameter { ParameterName = "@Costo", SqlDbType = System.Data.SqlDbType.Decimal, Value = entrada.Costo});
-            parametros.Add(new SqlParameter { ParameterName = "@Estatus", SqlDbType = System.Data.SqlDbType.Int, Value = entrada.Estatus});
-            parametros.Add(new SqlParameter { ParameterName = "@Usuario_registra", SqlDbType = System.Data.SqlDbType.Int, Value = entrada.Usuario_registra});
+           
             try
             {
                 DataSet ds = dac.Fill("UpdateDetalleEntrada", parametros);

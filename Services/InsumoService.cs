@@ -64,7 +64,7 @@ namespace reportesApi.Services
             return lista;
         }
 
-        public string InserInsumo(InsertInsumoModel Insumo)
+        public string InsertInsumo(InsertInsumoModel Insumo)
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
             parametros = new ArrayList();
