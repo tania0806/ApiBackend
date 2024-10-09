@@ -13,16 +13,17 @@ using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
+using ApiBackend.Models;
 namespace reportesApi.Services
 {
-    public class DetalleEntradasService
+    public class RecetasService
     {
         private  string connection;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private ArrayList parametros = new ArrayList();
 
 
-        public DetalleEntradasService(IMarcatelDatabaseSetting settings, IWebHostEnvironment webHostEnvironment)
+        public RecetasService(IMarcatelDatabaseSetting settings, IWebHostEnvironment webHostEnvironment)
         {
              connection = settings.ConnectionString;
 
@@ -30,26 +31,26 @@ namespace reportesApi.Services
              
         }
 
-        public List<DetalleEntradasModel> GetDetalleEntrada()
+        public List<RecetasModel> GetRecetas()
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
-            DetalleEntradasModel almacen = new DetalleEntradasModel();
+            RecetasModel almacen = new RecetasModel();
 
-            List<DetalleEntradasModel> lista = new List<DetalleEntradasModel>();
+            List<RecetasModel> lista = new List<RecetasModel>();
             try
             {
                 parametros = new ArrayList();
-                DataSet ds = dac.Fill("GetDetalleEntrada", parametros);
+                DataSet ds = dac.Fill("sp_get_recetas", parametros);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
 
                   lista = ds.Tables[0].AsEnumerable()
-                    .Select(dataRow => new DetalleEntradasModel {
+                    .Select(dataRow => new RecetasModel {
                         Id = int.Parse(dataRow["Id"].ToString()),
-                        IdEntrada = int.Parse(dataRow["IdEntrada"].ToString()),
-                        Insumo = dataRow["Insumo"].ToString(),
-                        Cantidad = decimal.Parse(dataRow["Cantidad"].ToString()),
-                        Costo = decimal.Parse(dataRow["Costo"].ToString()),
+                        Nombre = dataRow["Nombre"].ToString(),
+                        Estatus = int.Parse(dataRow["Estatus"].ToString()),
+                        Fecha_crecion = dataRow["Total"].ToString(),
+                        Usuario_registra = int.Parse(dataRow["Usuario_registra"].ToString()),
                     
                     }).ToList();
                 }
@@ -61,20 +62,19 @@ namespace reportesApi.Services
             return lista;
         }
 
-        public string InsertDetalleEntrada(DetalleEntradasModel entradas)
+        public string InsertRecetas(RecetasModel entradas)
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
             parametros = new ArrayList();
             string mensaje;
 
-            parametros.Add(new SqlParameter { ParameterName = "@IdEntrada", SqlDbType = System.Data.SqlDbType.Int, Value = entradas.IdEntrada});
-            parametros.Add(new SqlParameter { ParameterName = "@Insumo", SqlDbType = System.Data.SqlDbType.VarChar, Value = entradas.Insumo});
-            parametros.Add(new SqlParameter { ParameterName = "@Cantidad", SqlDbType = System.Data.SqlDbType.Decimal, Value = entradas.Cantidad});
-            parametros.Add(new SqlParameter { ParameterName = "@Costo", SqlDbType = System.Data.SqlDbType.Decimal, Value = entradas.Costo});
+            parametros.Add(new SqlParameter { ParameterName = "@Nombre", SqlDbType = System.Data.SqlDbType.Int, Value = entradas.Nombre });
+            parametros.Add(new SqlParameter { ParameterName = "@Usuario_registra", SqlDbType = System.Data.SqlDbType.Int, Value = entradas.Usuario_registra});
           
+
             try
             {
-                DataSet ds = dac.Fill("InsertDetalleEntrada", parametros);
+                DataSet ds = dac.Fill("InsertReceta", parametros);
                 mensaje = ds.Tables[0].AsEnumerable().Select(dataRow => dataRow["mensaje"].ToString()).ToList()[0];
             }
             catch (Exception ex)
@@ -84,22 +84,20 @@ namespace reportesApi.Services
             return mensaje;
         }
 
-        public string UpdateDetalleEntrada(DetalleEntradasModel entrada)
+        public string UpdateRecetas(RecetasModel entrada)
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
             parametros = new ArrayList();
             string mensaje;
 
             parametros.Add(new SqlParameter { ParameterName = "@Id", SqlDbType = System.Data.SqlDbType.VarChar, Value = entrada.Id });
-            parametros.Add(new SqlParameter { ParameterName = "@IdEntrada", SqlDbType = System.Data.SqlDbType.Int, Value = entrada.IdEntrada});
-            parametros.Add(new SqlParameter { ParameterName = "@Insumo", SqlDbType = System.Data.SqlDbType.VarChar, Value = entrada.Insumo});
-            parametros.Add(new SqlParameter { ParameterName = "@Cantidad", SqlDbType = System.Data.SqlDbType.Decimal, Value = entrada.Cantidad});
-          
-            parametros.Add(new SqlParameter { ParameterName = "@Costo", SqlDbType = System.Data.SqlDbType.Decimal, Value = entrada.Costo});
+            parametros.Add(new SqlParameter { ParameterName = "@Nombre", SqlDbType = System.Data.SqlDbType.Int, Value = entrada.Nombre });
+            parametros.Add(new SqlParameter { ParameterName = "@Estatus", SqlDbType = System.Data.SqlDbType.Int, Value = entrada.Estatus });
            
+
             try
             {
-                DataSet ds = dac.Fill("UpdateDetalleEntrada", parametros);
+                DataSet ds = dac.Fill("UpdateRecetas", parametros);
                 mensaje = ds.Tables[0].AsEnumerable().Select(dataRow => dataRow["mensaje"].ToString()).ToList()[0];
             }
             catch (Exception ex)
@@ -110,7 +108,7 @@ namespace reportesApi.Services
             return mensaje;
         }
 
-      public void DeleteDetalleEntrada(int id)
+      public void DeleteRecetas(int id)
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
             parametros = new ArrayList();
@@ -119,7 +117,7 @@ namespace reportesApi.Services
 
             try
             {
-                dac.ExecuteNonQuery("DeleteDetalleEntrada", parametros);
+                dac.ExecuteNonQuery("sp_delete_recetas", parametros);
             }
             catch (Exception ex)
             {
